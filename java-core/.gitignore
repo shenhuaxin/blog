@@ -1,8 +1,5 @@
-# Created by .ignore support plugin (hsz.mobi)
-### Gradle template
-
-.gradle
 gradle
+.gradle
 build
 target
 gradlew.bat
