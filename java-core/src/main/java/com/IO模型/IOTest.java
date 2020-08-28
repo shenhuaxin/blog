@@ -1,4 +1,4 @@
-package IO模型;
+package com.IO模型;
 
 import java.io.*;
 import java.nio.MappedByteBuffer;

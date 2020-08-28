@@ -1,4 +1,4 @@
-package bytecode;
+package com.bytecode;
 
 
 import java.io.File;
