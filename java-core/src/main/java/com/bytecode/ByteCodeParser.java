@@ -6,7 +6,10 @@ import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ByteCodeTest {
+/**
+ * Class文件格式详情见深入理解JAVA虚拟机
+ */
+public class ByteCodeParser {
 
 
     public static void main(String[] args) throws Exception {
