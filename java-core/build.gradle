@@ -2,13 +2,63 @@ plugins {
     id 'java'
 }
 
-group 'org.example'
-version '1.0-SNAPSHOT'
+compileJava.options.encoding = 'UTF-8'
+compileTestJava.options.encoding = 'UTF-8'
 
+
+
+def lmr = 'D:\\apache-maven-3.6.3\\repository'
 repositories {
     mavenCentral()
+    maven {url lmr}
 }
 
+/**
+ *  <dependencies>
+ *         <dependency>
+ *             <groupId>com.sun</groupId>
+ *             <artifactId>tools</artifactId>
+ *             <version>1.8</version>
+ *             <scope>system</scope>
+ *             <systemPath>${java.home}/../lib/tools.jar</systemPath>
+ *         </dependency>
+ *     </dependencies>
+ */
+def jdkHome = System.getenv("JAVA_HOME")
+
+
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile group: 'org.projectlombok', name: 'lombok', version: '1.18.12'
+    compile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.6.2'
+    compileOnly group: 'org.example', name:'asm-demo', version: '1.0'
+    compile files("$jdkHome/lib/tools.jar")
+    annotationProcessor group: 'org.example', name:'asm-demo', version: '1.0'
+
+}
+
+
+jar {
+    String someString = ''
+    configurations.runtime.each {someString = someString + " lib\\"+it.name}
+    manifest {
+        attributes 'Main-Class': 'com.each.dubboMainEnd'
+        attributes 'Class-Path': someString
+    }
+}
+
+//清除上次的编译过的文件
+task clearPj(type:Delete){
+    delete 'build','target'
+}
+
+task copyJar(type:Copy){
+    from configurations.runtime
+    into ('build/libs/lib')
+
+}
+
+//把JAR复制到目标目录
+task release(type: Copy,dependsOn: [build,copyJar]) {
+//    from  'conf'
+//    into ('build/libs/eachend/conf') // 目标位置
 }

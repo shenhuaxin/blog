@@ -1,8 +1,0 @@
-gradle
-.gradle
-build
-target
-gradlew.bat
-gradlew
-!/gradle/
-!/target/
