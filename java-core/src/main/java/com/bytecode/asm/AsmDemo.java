@@ -1,14 +1,13 @@
 package com.bytecode.asm;
 
-import com.asm.demo.Setter;
-import com.asm.demo.SetterObj;
+
+import com.processor.CustomAnno;
 
 import java.io.FileOutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-
-@Setter
+@CustomAnno
 public class AsmDemo {
 
     private String name;
@@ -28,8 +27,12 @@ public class AsmDemo {
 //        fout.write(data);
 ////        fout.close();
 //        System.out.println("now generator cc success!!!!!");
-//        AsmObj asmObj = new AsmObj();
-//        System.out.println(asmObj.getName());
+        AsmDemo asmObj = new AsmDemo();
+        asmObj.name = "nihao";
+        System.out.println(asmObj.getName());
+//        Method getName = AsmDemo.class.getMethod("getName");
+//        System.out.println(getName.invoke(asmObj));
+////        System.out.println(asmObj.getName());
 
     }
 }

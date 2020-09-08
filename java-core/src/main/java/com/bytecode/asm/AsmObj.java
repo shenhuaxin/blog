@@ -1,8 +1,11 @@
 package com.bytecode.asm;
 
-import lombok.Data;
 
-@Data
+import com.processor.GetterAnno;
+import com.processor.SetterAnno;
+
+@SetterAnno
+@GetterAnno
 public class AsmObj {
 
 

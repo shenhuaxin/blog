@@ -7,33 +7,21 @@ compileTestJava.options.encoding = 'UTF-8'
 
 
 
-def lmr = 'D:\\apache-maven-3.6.3\\repository'
+def lmr = System.getenv("MAVEN_HOME")+'/localRepository'
+
 repositories {
     mavenCentral()
     maven {url lmr}
 }
 
-/**
- *  <dependencies>
- *         <dependency>
- *             <groupId>com.sun</groupId>
- *             <artifactId>tools</artifactId>
- *             <version>1.8</version>
- *             <scope>system</scope>
- *             <systemPath>${java.home}/../lib/tools.jar</systemPath>
- *         </dependency>
- *     </dependencies>
- */
 def jdkHome = System.getenv("JAVA_HOME")
-
 
 dependencies {
     compile group: 'org.projectlombok', name: 'lombok', version: '1.18.12'
     compile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.6.2'
-    compileOnly group: 'org.example', name:'asm-demo', version: '1.0'
+    compileOnly group: 'org.example', name:'custom-anno', version: '1.0.0'
     compile files("$jdkHome/lib/tools.jar")
-    annotationProcessor group: 'org.example', name:'asm-demo', version: '1.0'
-
+    annotationProcessor group: 'org.example', name: 'custom-anno', version: '1.0.0'
 }
 
 
