@@ -5,7 +5,6 @@ import com.processor.GetterAnno;
 import com.processor.SetterAnno;
 
 @SetterAnno
-@GetterAnno
 public class AsmObj {
 
 

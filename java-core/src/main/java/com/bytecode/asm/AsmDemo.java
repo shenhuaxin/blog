@@ -2,12 +2,15 @@ package com.bytecode.asm;
 
 
 import com.processor.CustomAnno;
+import com.processor.GetterAnno;
+import com.processor.SetterAnno;
 
 import java.io.FileOutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 @CustomAnno
+@SetterAnno
 public class AsmDemo {
 
     private String name;

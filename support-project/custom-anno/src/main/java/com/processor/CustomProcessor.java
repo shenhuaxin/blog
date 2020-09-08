@@ -94,7 +94,11 @@ public class CustomProcessor extends AbstractProcessor {
         ListBuffer<JCTree.JCStatement> statements = new ListBuffer<>();
         statements.append(treeMaker.Return(treeMaker.Select(treeMaker.Ident(names.fromString("this")), jcVariableDecl.getName())));
         JCTree.JCBlock body = treeMaker.Block(0, statements.toList());
-        return treeMaker.MethodDef(treeMaker.Modifiers(Flags.PUBLIC), getNewMethodName(jcVariableDecl.getName()), jcVariableDecl.vartype, List.nil(), List.nil(), List.nil(), body, null);
+        return treeMaker.MethodDef(
+                treeMaker.Modifiers(Flags.PUBLIC),
+                getNewMethodName(jcVariableDecl.getName()),
+                jcVariableDecl.vartype,
+                List.nil(), List.nil(), List.nil(), body, null);
     }
 
     private Name getNewMethodName(Name name) {
