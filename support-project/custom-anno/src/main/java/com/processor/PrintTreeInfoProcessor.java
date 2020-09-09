@@ -135,11 +135,11 @@ public class PrintTreeInfoProcessor extends AbstractProcessor {
                 /**
                  * 访问变量和静态变量
                  * public JCTree.JCModifiers mods;        访问标识符(注解也是访问标识符)
-                 * public Name name;                      方法名
+                 * public Name name;                      字段名
                  * public JCTree.JCExpression nameexpr;
                  * public JCTree.JCExpression vartype;    变量类型
                  * public JCTree.JCExpression init;       初始值
-                 * public VarSymbol sym;                  签名
+                 * public VarSymbol sym;                  符号
                  * @param jcVariableDecl
                  */
                 @Override
