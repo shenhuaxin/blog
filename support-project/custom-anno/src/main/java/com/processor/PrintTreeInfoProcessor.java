@@ -23,9 +23,10 @@ import java.util.Set;
  * @date 2020/9/8
  */
 @SupportedAnnotationTypes({
-        "com.processor.GetterAnno"
+        "com.processor.PrintAnno"
 })
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
+@SuppressWarnings("all")
 public class PrintTreeInfoProcessor extends AbstractProcessor {
 
     private Messager messager;
@@ -52,7 +53,7 @@ public class PrintTreeInfoProcessor extends AbstractProcessor {
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         System.out.println("process ----------------------------");
 
-        Set<? extends Element> set = roundEnv.getElementsAnnotatedWith(GetterAnno.class);
+        Set<? extends Element> set = roundEnv.getElementsAnnotatedWith(PrintAnno.class);
         set.forEach(element -> {
             JCTree jcTree = trees.getTree(element);
             jcTree.accept(new TreeTranslator() {
@@ -106,22 +107,24 @@ public class PrintTreeInfoProcessor extends AbstractProcessor {
                 @Override
                 public void visitMethodDef(JCTree.JCMethodDecl jcMethodDecl) {
                     System.out.println("method start -------------");
-                    System.out.println(jcMethodDecl.getModifiers().toString());
-                    System.out.println(jcMethodDecl.getName().toString());
-                    System.out.println(jcMethodDecl.getReturnType().toString());
-                    System.out.println(jcMethodDecl.getTypeParameters().toString());
-                    System.out.println(jcMethodDecl.getParameters().toString());
-                    System.out.println(jcMethodDecl.getThrows().toString());
-                    System.out.println(jcMethodDecl.sym.toString());
-                    System.out.println(jcMethodDecl.getBody().toString());
+                    System.out.println("mods " + jcMethodDecl.getModifiers().toString());
+                    System.out.println("name " + jcMethodDecl.getName().toString());
+                    if (jcMethodDecl.getReturnType() != null)
+                        System.out.println("returnType " + jcMethodDecl.getReturnType().toString());
+                    if (jcMethodDecl.getTypeParameters() != null)
+                        System.out.println("typeparam " + jcMethodDecl.getTypeParameters().toString());
+                    System.out.println("params " + jcMethodDecl.getParameters().toString());
+                    System.out.println("throw " + jcMethodDecl.getThrows().toString());
+                    System.out.println("sym " + jcMethodDecl.sym.toString());
+                    System.out.println("body " + jcMethodDecl.getBody().toString());
 
                     if (jcMethodDecl.getDefaultValue() != null) {
-                        System.out.println(jcMethodDecl.getDefaultValue().toString());
+                        System.out.println("defaultV: "+jcMethodDecl.getDefaultValue().toString());
                     }else {
                         System.out.println("jcMethodDecl.getDefaultValue() is null");
                     }
                     if (jcMethodDecl.getReceiverParameter() != null) {
-                        System.out.println(jcMethodDecl.getReceiverParameter());
+                        System.out.println("receParam: " +jcMethodDecl.getReceiverParameter());
                     }else {
                         System.out.println("jcMethodDecl.getReceiverParameter() is null");
                     }
@@ -143,7 +146,7 @@ public class PrintTreeInfoProcessor extends AbstractProcessor {
                 public void visitVarDef(JCTree.JCVariableDecl jcVariableDecl) {
                     System.out.println("varDef start -----------------");
                     System.out.println("mods: " + jcVariableDecl.mods.toString());
-                    System.out.println("mods: " + jcVariableDecl.mods.getAnnotations().toString());
+                    System.out.println("mods annotation: " + jcVariableDecl.mods.getAnnotations().toString());
                     System.out.println("name: " + jcVariableDecl.name.toString());
                     if (jcVariableDecl.nameexpr != null) {
                         System.out.println("nameexpr: " + jcVariableDecl.nameexpr.toString());
@@ -151,8 +154,10 @@ public class PrintTreeInfoProcessor extends AbstractProcessor {
                     if (jcVariableDecl.nameexpr != null) {
                         System.out.println("vartype: " + jcVariableDecl.vartype.toString());
                     }
-                    System.out.println("init: " + jcVariableDecl.init.toString());
-                    System.out.println("sym: " + jcVariableDecl.sym.toString());
+                    if (jcVariableDecl.init != null)
+                        System.out.println("init: " + jcVariableDecl.init.toString());
+                    if (jcVariableDecl.sym != null)
+                        System.out.println("sym: " + jcVariableDecl.sym.toString());
                     System.out.println("varDef end -----------------");
                     super.visitVarDef(jcVariableDecl);
                 }

@@ -1,26 +1,20 @@
 package com.bytecode.asm;
 
 
-import com.processor.GetterAnno;
-import com.processor.SetterAnno;
+import com.processor.PrintAnno;
 
-import javax.xml.bind.annotation.XmlElement;
-
-@SetterAnno
-@GetterAnno
+@PrintAnno
 public class AsmObj {
 
 
     private String name;
 
-    @XmlElement
     private String age = "10";
 
     public String getName() {
         return name;
     }
 
-//    @GetterAnno
     public String getAge(String name, Long age1) {
         this.name = name;
         String name1 = name;

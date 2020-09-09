@@ -11,5 +11,5 @@ import java.lang.annotation.Target;
  */
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.TYPE})
 @Retention(RetentionPolicy.SOURCE)
-public @interface GetterAnno {
+public @interface PrintAnno {
 }
