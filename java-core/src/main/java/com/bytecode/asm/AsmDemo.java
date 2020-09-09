@@ -2,7 +2,6 @@ package com.bytecode.asm;
 
 
 import com.processor.CustomAnno;
-import com.processor.GetterAnno;
 import com.processor.SetterAnno;
 
 import java.io.FileOutputStream;
