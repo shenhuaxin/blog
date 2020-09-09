@@ -138,8 +138,8 @@ public class PrintTreeInfoProcessor extends AbstractProcessor {
                  * public Name name;                      方法名
                  * public JCTree.JCExpression nameexpr;
                  * public JCTree.JCExpression vartype;    变量类型
-                 * public JCTree.JCExpression init;
-                 * public VarSymbol sym;
+                 * public JCTree.JCExpression init;       初始值
+                 * public VarSymbol sym;                  签名
                  * @param jcVariableDecl
                  */
                 @Override
