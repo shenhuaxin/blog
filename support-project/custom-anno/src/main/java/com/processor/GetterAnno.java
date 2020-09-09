@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
  * @author shenhuaxin
  * @date 2020/9/8
  */
-@Target({ElementType.TYPE})
+@Target({ElementType.METHOD, ElementType.FIELD, ElementType.TYPE})
 @Retention(RetentionPolicy.SOURCE)
 public @interface GetterAnno {
 }
