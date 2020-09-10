@@ -71,6 +71,7 @@ public class BuildMethodProcessor extends AbstractProcessor {
                             jcClassDecl.defs = jcClassDecl.defs.append(generateSetterMethod(var));
                         }
                     }
+                    jcClassDecl.defs = jcClassDecl.defs.append(generateHashCodeMethod(jcClassDecl));
                 }
             });
         }
@@ -105,7 +106,7 @@ public class BuildMethodProcessor extends AbstractProcessor {
     public JCTree.JCMethodDecl generateSetterMethod(JCTree.JCVariableDecl variable) {
         JCTree.JCModifiers publicModifier = treeMaker.Modifiers(Flags.PUBLIC);     // 访问类型
         JCTree.JCExpression vartype = treeMaker.TypeIdent(TypeTag.VOID);           // 返回类型
-        Name methodName = names.fromString("set" + variable.name);                 // 方法名
+        Name methodName = names.fromString("set" + variable.name);             // 方法名
 
         JCTree.JCVariableDecl inParam = treeMaker.VarDef(                          // 形参
                 treeMaker.Modifiers(Flags.PARAMETER),
@@ -124,7 +125,7 @@ public class BuildMethodProcessor extends AbstractProcessor {
         //
         List<JCTree.JCTypeParameter> genericParam = List.nil();
         List<JCTree.JCExpression> expressionList = List.nil();
-        JCTree.JCExpression defalutValue = null;
+        JCTree.JCExpression defaultValue = null;
 
         JCTree.JCMethodDecl getter = treeMaker.MethodDef(publicModifier,
                 methodName,
@@ -133,13 +134,68 @@ public class BuildMethodProcessor extends AbstractProcessor {
                 parameters,
                 expressionList,
                 block,
-                defalutValue);
-
-
+                defaultValue);
         return getter;
     }
 
-    public JCTree.JCMethodDecl generateEqualMethod() {
 
+    public JCTree.JCMethodDecl generateHashCodeMethod(JCTree.JCClassDecl classDecl) {
+        List<JCTree.JCVariableDecl> fields = List.nil();
+        List<JCTree.JCExpression> fieldTypes = List.nil();
+        List<JCTree.JCExpression> fieldNames = List.nil();
+        for (JCTree def : classDecl.defs) {
+            if (def instanceof JCTree.JCVariableDecl) {
+                JCTree.JCVariableDecl field = ((JCTree.JCVariableDecl) def);
+                fields.append(field);
+                System.out.println(field.vartype.type);
+                fieldTypes = fieldTypes.append(memberAccess(field.vartype.type.toString()));
+                fieldNames = fieldNames.append(treeMaker.Ident(field.name));
+            }
+        }
+        JCTree.JCModifiers publicModifier = treeMaker.Modifiers(Flags.PUBLIC);
+        JCTree.JCExpression returnType = treeMaker.TypeIdent(TypeTag.INT);
+        Name method = names.fromString("hashCode");
+
+        // java.util.Objects.hash
+        JCTree.JCExpression expr = treeMaker.Ident(names.fromString("java"));
+        expr = treeMaker.Select(expr, names.fromString("util"));
+        expr = treeMaker.Select(expr, names.fromString("Objects"));
+        expr = treeMaker.Select(expr, names.fromString("hash"));
+
+        JCTree.JCStatement aReturn = treeMaker.Return(treeMaker.Apply(fieldTypes, expr, fieldNames));
+        List<JCTree.JCStatement> statementList = List.of(aReturn);
+        JCTree.JCBlock block = treeMaker.Block(0, statementList);
+        JCTree.JCMethodDecl methodDecl = treeMaker.MethodDef(publicModifier, method, returnType, List.nil(), List.nil(), List.nil(), block, null);
+        System.out.println(methodDecl.toString());
+        return methodDecl;
     }
+
+    public JCTree.JCMethodDecl generateEqualMethod(JCTree.JCVariableDecl variable) {
+        JCTree.JCModifiers publicModifier = treeMaker.Modifiers(Flags.PUBLIC);
+        JCTree.JCExpression returnType = treeMaker.TypeIdent(TypeTag.BOOLEAN);
+        Name method = names.fromString("equal");
+        JCTree.JCVariableDecl param = treeMaker.VarDef(treeMaker.Modifiers(Flags.PARAMETER),
+                names.fromString("object"),
+                treeMaker.TypeIdent(TypeTag.valueOf("Object")),
+                null);
+        param.pos = variable.pos;
+        List<JCTree.JCVariableDecl> params = List.of(param);
+
+
+
+
+        return null;
+    }
+
+
+    //传入一个类的全路径名，获取对应类的JCIdent
+    private JCTree.JCExpression memberAccess(String components) {
+        String[] componentArray = components.split("\\.");
+        JCTree.JCExpression expr = treeMaker.Ident(names.fromString(componentArray[0]));
+        for (int i = 1; i < componentArray.length; i++) {
+            expr = treeMaker.Select(expr, names.fromString(componentArray[i]));
+        }
+        return expr;
+    }
+
 }
