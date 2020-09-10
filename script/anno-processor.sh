@@ -3,4 +3,4 @@ pwd
 cd ../support-project
 mvn clean install
 cd ../java-core
-mvn clean install
+mvn clean install -X
