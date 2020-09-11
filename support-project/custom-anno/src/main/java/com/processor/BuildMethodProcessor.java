@@ -1,12 +1,7 @@
 package com.processor;
 
-import com.sun.source.tree.ClassTree;
-import com.sun.source.tree.Tree;
-import com.sun.source.tree.TreeVisitor;
 import com.sun.tools.javac.api.JavacTrees;
 import com.sun.tools.javac.code.Flags;
-import com.sun.tools.javac.code.Symbol;
-import com.sun.tools.javac.code.Type;
 import com.sun.tools.javac.code.TypeTag;
 import com.sun.tools.javac.processing.JavacProcessingEnvironment;
 import com.sun.tools.javac.tree.JCTree;
@@ -25,6 +20,7 @@ import java.util.Set;
 
 /**
  * 创建方法的Processor
+ *
  * @author shenhuaxin
  * @date 2020/9/10
  */
@@ -53,6 +49,7 @@ public class BuildMethodProcessor extends AbstractProcessor {
         this.names = Names.instance(context);
         System.out.println("init end ---------------------------");
     }
+
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         System.out.println("processor -------------------");
@@ -81,6 +78,7 @@ public class BuildMethodProcessor extends AbstractProcessor {
 
     /**
      * 生成Getter方法
+     *
      * @param variableDecl
      * @return
      */
@@ -173,33 +171,69 @@ public class BuildMethodProcessor extends AbstractProcessor {
     }
 
     /**
-     * @Override
-     * public boolean equals(Object o) {
-     *     if (this == o) return true;
-     *     if (o == null || getClass() != o.getClass()) return false;
-     *     GetterProcessorTest that = (GetterProcessorTest) o;
-     *     return Objects.equals(name, that.name);
+     * @Override public boolean equals(Object o) {
+     * if (this == o) return true;
+     * if (o == null || getClass() != o.getClass()) return false;
+     * GetterProcessorTest that = (GetterProcessorTest) o;
+     * return Objects.equals(name, that.name);
      * }
      */
     public JCTree.JCMethodDecl generateEqualMethod(JCTree.JCClassDecl classDecl) {
+        // public boolean equals(Object o)
         JCTree.JCModifiers publicModifier = treeMaker.Modifiers(Flags.PUBLIC);
-        JCTree.JCExpression returnType = treeMaker.Ident(names.fromString("java"));
-        returnType = treeMaker.Select(returnType, names.fromString("lang"));
-        returnType = treeMaker.Select(returnType, names.fromString("String"));
-        Name method = names.fromString("equal");
+        JCTree.JCExpression returnType = treeMaker.TypeIdent(TypeTag.BOOLEAN);
+        Name method = names.fromString("equals");
         JCTree.JCExpression ObjectExpr = treeMaker.Ident(names.fromString("java"));
         ObjectExpr = treeMaker.Select(ObjectExpr, names.fromString("lang"));
         ObjectExpr = treeMaker.Select(ObjectExpr, names.fromString("Object"));
-        JCTree.JCVariableDecl param = treeMaker.VarDef(treeMaker.Modifiers(Flags.PARAMETER),
-                names.fromString("o"),
-                ObjectExpr,
-                null);
+        JCTree.JCVariableDecl param = treeMaker.VarDef(treeMaker.Modifiers(Flags.PARAMETER), names.fromString("o"), ObjectExpr, null);
         param.pos = classDecl.pos;
         List<JCTree.JCVariableDecl> params = List.of(param);
 
         List<JCTree.JCStatement> statement = List.nil();
-        JCTree.JCStatement aNull = treeMaker.Return(treeMaker.Literal(TypeTag.BOT, null));
-        statement = statement.append(aNull);
+        // if (this == o) return true;
+        JCTree.JCBinary thisEqualOIf = treeMaker.Binary(JCTree.Tag.EQ, treeMaker.Ident(names.fromString("this")), treeMaker.Ident(names.fromString("o")));
+        JCTree.JCReturn thisEqualOTrue = treeMaker.Return(treeMaker.Literal(true));
+        JCTree.JCIf thisequaloif = treeMaker.If(thisEqualOIf, thisEqualOTrue, null);
+//        System.out.println(thisequaloif);
+        // if (o == null || getClass() != o.getClass()) return false;
+        JCTree.JCBinary oequalnull = treeMaker.Binary(JCTree.Tag.EQ, treeMaker.Ident(names.fromString("o")), treeMaker.Literal(TypeTag.BOT, null));
+        JCTree.JCExpression getClass = treeMaker.Ident(names.fromString("this"));
+        getClass = treeMaker.Apply(List.nil(), treeMaker.Select(getClass, names.fromString("getClass")), List.nil());
+        JCTree.JCExpression oGetClass = treeMaker.Ident(names.fromString("o"));
+        oGetClass = treeMaker.Apply(List.nil(), treeMaker.Select(oGetClass, names.fromString("getClass")), List.nil());
+        JCTree.JCBinary classequal = treeMaker.Binary(JCTree.Tag.NE, getClass, oGetClass);
+        JCTree.JCBinary classequalStatement = treeMaker.Binary(JCTree.Tag.OR, oequalnull, classequal);
+        JCTree.JCIf classIf = treeMaker.If(classequalStatement, treeMaker.Return(treeMaker.Literal(false)), null);
+        // GetterProcessorTest that = (GetterProcessorTest) o;
+        JCTree.JCExpression castexpr = treeMaker.TypeCast(treeMaker.Ident(classDecl.name), treeMaker.Ident(names.fromString("o")));
+        JCTree.JCVariableDecl that = treeMaker.VarDef(treeMaker.Modifiers(Flags.PARAMETER), names.fromString("that"), treeMaker.Ident(classDecl.name), castexpr);
+
+        //  return Objects.equals(name, that.name);
+        List<JCTree.JCExpression> typelist = List.nil();
+        List<JCTree.JCExpression> namelist = List.nil();
+        typelist = typelist.append(treeMaker.Ident(classDecl.name));
+        typelist = typelist.append(treeMaker.Ident(classDecl.name));
+
+        JCTree.JCIdent name = treeMaker.Ident(names.fromString("name"));
+//        JCTree.JCIdent name1 = treeMaker.Ident(names.fromString("that.name"));
+        JCTree.JCIdent that1 = treeMaker.Ident(names.fromString("that"));
+        JCTree.JCFieldAccess name1 = treeMaker.Select(that1, names.fromString("name"));
+
+        namelist = namelist.append(name);
+        namelist = namelist.append(name1);
+
+        JCTree.JCExpression returnExpr = treeMaker.Ident(names.fromString("java"));
+        returnExpr = treeMaker.Select(returnExpr, names.fromString("util"));
+        returnExpr = treeMaker.Select(returnExpr, names.fromString("Objects"));
+        returnExpr = treeMaker.Select(returnExpr, names.fromString("equals"));
+        JCTree.JCStatement aReturn = treeMaker.Return(treeMaker.Apply(typelist, returnExpr,namelist));
+
+        statement = statement.append(thisequaloif);
+        statement = statement.append(classIf);
+        statement = statement.append(that);
+
+        statement = statement.append(aReturn);
         JCTree.JCBlock block = treeMaker.Block(0, statement);
         JCTree.JCMethodDecl methodDecl = treeMaker.MethodDef(publicModifier, method, returnType, List.nil(), params, List.nil(), block, null);
         System.out.println(methodDecl);
