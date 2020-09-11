@@ -2,6 +2,8 @@ package com.bytecode.annotation.processor;
 
 import com.processor.GetterAnno;
 
+import java.util.Objects;
+
 /**
  * @author shenhuaxin
  * @date 2020/9/10
@@ -13,6 +15,6 @@ public class GetterProcessorTest {
 
 
     public static void main(String[] args) {
-        System.out.println("111111");
+        System.out.println(new GetterProcessorTest().hashCode());
     }
 }
