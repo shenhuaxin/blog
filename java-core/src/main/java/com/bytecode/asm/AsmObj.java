@@ -1,11 +1,9 @@
 package com.bytecode.asm;
 
 
-import com.processor.PrintAnno;
 
 import java.util.Objects;
 
-@PrintAnno
 public class AsmObj {
 
 

@@ -117,7 +117,6 @@ public class PrintTreeInfoProcessor extends AbstractProcessor {
                     System.out.println("throw " + jcMethodDecl.getThrows().toString());
                     System.out.println("sym " + jcMethodDecl.sym.toString());
                     System.out.println("body " + jcMethodDecl.getBody().toString());
-
                     if (jcMethodDecl.getDefaultValue() != null) {
                         System.out.println("defaultV: "+jcMethodDecl.getDefaultValue().toString());
                     }else {
@@ -129,6 +128,16 @@ public class PrintTreeInfoProcessor extends AbstractProcessor {
                         System.out.println("jcMethodDecl.getReceiverParameter() is null");
                     }
                     System.out.println("method end -------------");
+
+
+                    List<JCTree.JCStatement> statements = jcMethodDecl.getBody().getStatements();
+                    JCTree.JCStatement jcStatement = statements.get(0);
+                    JCTree.JCReturn jcReturn = (JCTree.JCReturn) jcStatement;
+                    JCTree.JCLiteral jcLiteral = (JCTree.JCLiteral) jcReturn.getExpression();
+
+                    System.out.println(jcLiteral.type == null);
+                    System.out.println(jcLiteral.typetag);
+                    System.out.println(jcLiteral.pos);
                     super.visitMethodDef(jcMethodDecl);
                 }
 

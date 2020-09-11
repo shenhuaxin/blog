@@ -8,8 +8,7 @@ import java.io.FileOutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-@CustomAnno
-@SetterAnno
+
 public class AsmDemo<K, V> {
 
     private String name;

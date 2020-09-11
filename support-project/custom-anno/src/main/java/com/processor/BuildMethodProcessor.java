@@ -183,7 +183,9 @@ public class BuildMethodProcessor extends AbstractProcessor {
      */
     public JCTree.JCMethodDecl generateEqualMethod(JCTree.JCClassDecl classDecl) {
         JCTree.JCModifiers publicModifier = treeMaker.Modifiers(Flags.PUBLIC);
-        JCTree.JCExpression returnType = treeMaker.TypeIdent(TypeTag.BOOLEAN);
+        JCTree.JCExpression returnType = treeMaker.Ident(names.fromString("java"));
+        returnType = treeMaker.Select(returnType, names.fromString("lang"));
+        returnType = treeMaker.Select(returnType, names.fromString("String"));
         Name method = names.fromString("equal");
         JCTree.JCExpression ObjectExpr = treeMaker.Ident(names.fromString("java"));
         ObjectExpr = treeMaker.Select(ObjectExpr, names.fromString("lang"));
@@ -195,17 +197,10 @@ public class BuildMethodProcessor extends AbstractProcessor {
         param.pos = classDecl.pos;
         List<JCTree.JCVariableDecl> params = List.of(param);
 
-        System.out.println("return null start ---------------");
         List<JCTree.JCStatement> statement = List.nil();
-//        JCTree.JCExpression nullExpr = treeMaker.Ident(names.fromString("null"));
-        JCTree.JCStatement aNull = treeMaker.Return(null);
+        JCTree.JCStatement aNull = treeMaker.Return(treeMaker.Literal(TypeTag.BOT, null));
         statement = statement.append(aNull);
-        System.out.println(aNull);
-        System.out.println("return null end   ---------------");
-
-
         JCTree.JCBlock block = treeMaker.Block(0, statement);
-
         JCTree.JCMethodDecl methodDecl = treeMaker.MethodDef(publicModifier, method, returnType, List.nil(), params, List.nil(), block, null);
         System.out.println(methodDecl);
         return methodDecl;
