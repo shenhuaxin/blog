@@ -27,7 +27,7 @@ import java.util.Set;
 @SuppressWarnings("all")
 @SupportedAnnotationTypes("com.processor.GetterAnno")
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
-public class BuildMethodProcessor extends AbstractProcessor {
+public class DataAnnoProcessor extends AbstractProcessor {
 
     private Messager messager;
 
@@ -53,7 +53,7 @@ public class BuildMethodProcessor extends AbstractProcessor {
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         System.out.println("processor -------------------");
-        Set<? extends Element> setterAnno = roundEnv.getElementsAnnotatedWith(GetterAnno.class);
+        Set<? extends Element> setterAnno = roundEnv.getElementsAnnotatedWith(Data.class);
         for (Element element : setterAnno) {
             JCTree jcTree = trees.getTree(element);
             jcTree.accept(new TreeTranslator() {
@@ -216,7 +216,6 @@ public class BuildMethodProcessor extends AbstractProcessor {
         typelist = typelist.append(treeMaker.Ident(classDecl.name));
 
         JCTree.JCIdent name = treeMaker.Ident(names.fromString("name"));
-//        JCTree.JCIdent name1 = treeMaker.Ident(names.fromString("that.name"));
         JCTree.JCIdent that1 = treeMaker.Ident(names.fromString("that"));
         JCTree.JCFieldAccess name1 = treeMaker.Select(that1, names.fromString("name"));
 

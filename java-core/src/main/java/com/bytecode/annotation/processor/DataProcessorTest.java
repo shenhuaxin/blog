@@ -1,20 +1,18 @@
 package com.bytecode.annotation.processor;
 
-import com.processor.GetterAnno;
-
-import java.util.Objects;
+import com.processor.Data;
 
 /**
  * @author shenhuaxin
  * @date 2020/9/10
  */
-@GetterAnno
-public class GetterProcessorTest {
+@Data
+public class DataProcessorTest {
 
     private String name;
 
 
     public static void main(String[] args) {
-        System.out.println(new GetterProcessorTest().hashCode());
+        System.out.println(new DataProcessorTest().hashCode());
     }
 }
