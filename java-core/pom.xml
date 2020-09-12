@@ -4,14 +4,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>org.example</groupId>
+	<groupId>org.blog</groupId>
 	<artifactId>java-core</artifactId>
 	<version>1.0</version>
 
 
 	<dependencies>
 		<dependency>
-			<groupId>org.example</groupId>
+			<groupId>org.blog</groupId>
 			<artifactId>custom-anno</artifactId>
 			<version>1.0.0</version>
 		</dependency>
@@ -35,7 +35,7 @@
 					<encoding>UTF-8</encoding><!-- 指定编码格式，否则在DOS下运行mvn compile命令时会出现莫名的错误，因为系统默认使用GBK编码 -->
 					<annotationProcessorPaths>
 						<path>
-							<groupId>org.example</groupId>
+							<groupId>org.blog</groupId>
 							<artifactId>custom-anno</artifactId>
 							<version>1.0.0</version>
 						</path>
