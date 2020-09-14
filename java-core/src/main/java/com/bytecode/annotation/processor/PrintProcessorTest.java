@@ -1,6 +1,5 @@
 package com.bytecode.annotation.processor;
 
-import com.bytecode.asm.AsmObj;
 import com.processor.PrintAnno;
 
 /**
