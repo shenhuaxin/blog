@@ -19,6 +19,14 @@ public class ChangeClassTest {
     }
 
 
+    public static void addSetNameMethod() throws IOException {
+
+    }
+
+    public static void addGetNameMethod() throws IOException {
+
+    }
+
     public static void addMethodByTreeApi() throws IOException {
         ClassReader classReader = new ClassReader(BeforeAsmClass.class.getName());
         ClassWriter classWriter = new ClassWriter(0);
