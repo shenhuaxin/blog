@@ -6,7 +6,6 @@ import org.objectweb.asm.tree.MethodNode;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.reflect.Method;
 
 import static org.objectweb.asm.Opcodes.*;
 
