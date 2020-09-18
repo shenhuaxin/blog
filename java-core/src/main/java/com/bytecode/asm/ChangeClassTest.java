@@ -6,6 +6,9 @@ import org.objectweb.asm.tree.MethodNode;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 import static org.objectweb.asm.Opcodes.*;
 
@@ -39,10 +42,11 @@ public class ChangeClassTest {
     }
 
     /**
-     *  public getA()Ljava/lang/String;
-     *     ALOAD 0
-     *     GETFIELD com/bytecode/asm/BeforeAsmClass.a : Ljava/lang/String;
-     *     ARETURN
+     * public getA()Ljava/lang/String;
+     * ALOAD 0
+     * GETFIELD com/bytecode/asm/BeforeAsmClass.a : Ljava/lang/String;
+     * ARETURN
+     *
      * @throws IOException
      */
     public static void addGetNameMethodByTreeApi() throws IOException {
