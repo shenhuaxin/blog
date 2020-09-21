@@ -16,9 +16,11 @@ public class ChangeClassTest {
 
 
     public static void main(String[] args) throws IOException {
-        addField();
-        addSetNameMethodByCoreApi();
-        addGetNameMethodByTreeApi();
+//
+        System.out.println(Type.getType(String.class).getInternalName());
+//        addField();
+//        addSetNameMethodByCoreApi();
+//        addGetNameMethodByTreeApi();
     }
 
     public static void addSetNameMethodByCoreApi() throws IOException {
