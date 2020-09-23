@@ -47,7 +47,7 @@ public class ChangeClassTest {
      * public getA()Ljava/lang/String;
      * ALOAD 0
      * GETFIELD com/bytecode/asm/BeforeAsmClass.a : Ljava/lang/String;
-     * ARETURN
+     * ARETURN  1111
      * @throws IOException
      */
     public static void addGetNameMethodByTreeApi() throws IOException {
