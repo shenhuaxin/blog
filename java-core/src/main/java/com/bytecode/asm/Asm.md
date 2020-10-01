@@ -45,9 +45,17 @@ Object m(int[] i) | ([I)Ljava/lang/Object;
 ##### Local Variable: 方法本地变量
 除了静态方法，第0个都是this对象。
 ##### Execute Frame： 方法执行栈帧
+入栈出栈操作。
 
 #### CORE-API
-Core-Api
+Core-Api中有三大核心类： 
+1. ClassReader : 用于读取和解析二进制的class文件，每当有事件发生，调用ClassVisitor、MethodVisitor相应的方法。
+2. ClassVisitor : 是抽象类，重写该类中的方法，在事件发生时，触发自定义的逻辑。有些visit过程还可以触发子过程，
+例如，MethodVisitor、AnnotationVisitor。（如编译后类结果的图所示）
+3. ClassWriter : ClassWriter是ClassVisitor的一个实现类，它之前的每个ClassVisitor都可以对原始的字节码进行修改，
+ClassWriter最后使用toByteArray方法将最终修改的字节码以字节数组的方式返回。
+
+ClassVisitor的方法调用顺序： 
 ```
 visit
 [visitSource]
@@ -56,7 +64,10 @@ visit
 (visitInnerClass | visitField | visitMethod)* 
 visitEnd
 ```
-
+三者的联系如下：
+ClassReader:  event producer
+ClassVisitor: event filter
+ClassWriter: event writer
 
 
 

@@ -26,7 +26,7 @@ public class Foo {
 //            String encrypt = crypt(password);
 //            System.out.println(password + "        " + encrypt);
 //        }
-        System.out.println(crypt("4be141d8"));
+        System.out.println(crypt("4ec3bb1b"));
     }
 
 
