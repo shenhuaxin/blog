@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.List;
 
 import static org.objectweb.asm.Opcodes.ASM5;
+import static org.objectweb.asm.Opcodes.ASM8;
 
 public class ClassVisitTest {
     public static void main(String[] args) throws IOException {
@@ -54,9 +55,41 @@ public class ClassVisitTest {
             @Override
             public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
                 System.out.println("method: " + name);
+                System.out.println(desc);
+                System.out.println(signature);
                 return super.visitMethod(access, name, desc, signature, exceptions);
             }
         };
+
+
+        new ClassVisitor(ASM8) {
+
+            @Override
+            public ModuleVisitor visitModule(String name, int access, String version) {
+                return super.visitModule(name, access, version);
+            }
+            @Override
+            public AnnotationVisitor visitAnnotation(String descriptor, boolean visible) {
+                return super.visitAnnotation(descriptor, visible);
+            }
+            @Override
+            public AnnotationVisitor visitTypeAnnotation(int typeRef, TypePath typePath, String descriptor, boolean visible) {
+                return super.visitTypeAnnotation(typeRef, typePath, descriptor, visible);
+            }
+            @Override
+            public RecordComponentVisitor visitRecordComponent(String name, String descriptor, String signature) {
+                return super.visitRecordComponent(name, descriptor, signature);
+            }
+            @Override
+            public FieldVisitor visitField(int access, String name, String descriptor, String signature, Object value) {
+                return super.visitField(access, name, descriptor, signature, value);
+            }
+            @Override
+            public MethodVisitor visitMethod(int access, String name, String descriptor, String signature, String[] exceptions) {
+                return super.visitMethod(access, name, descriptor, signature, exceptions);
+            }
+        };
+
         cr.accept(cv, ClassReader.SKIP_CODE | ClassReader.SKIP_DEBUG);
     }
 

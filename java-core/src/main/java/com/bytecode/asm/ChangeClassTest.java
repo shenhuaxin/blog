@@ -6,9 +6,6 @@ import org.objectweb.asm.tree.MethodNode;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
 
 import static org.objectweb.asm.Opcodes.*;
 
@@ -23,6 +20,56 @@ public class ChangeClassTest {
 //        addGetNameMethodByTreeApi();
     }
 
+    /**
+     * GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+     *     LDC "do something"
+     *     INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/String;)V
+     * @throws IOException
+     */
+    public static void changeOriginMethod() throws IOException {
+        ClassReader classReader = new ClassReader(BeforeAsmClass.class.getName());
+        ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
+        ClassVisitor classVisitor = new ClassVisitor(ASM8, classWriter) {
+            @Override
+            public MethodVisitor visitMethod(int access, String name, String descriptor, String signature, String[] exceptions) {
+
+                MethodVisitor mv = super.visitMethod(access, name, descriptor, signature, exceptions);
+                if ("originMethod".equals(name)) {
+                    return new MethodVisitor(ASM8, mv) {
+                        @Override
+                        public void visitCode() {
+                            mv.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
+                            mv.visitLdcInsn("enter " + name);
+                            mv.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V", false);
+                            super.visitCode();
+                        }
+                        @Override
+                        public void visitInsn(int opcode) {
+                            switch (opcode) {
+                                case RETURN:
+                                case IRETURN:
+                                case FRETURN:
+                                case DRETURN:
+                                case LRETURN:
+                                case ARETURN:
+                                case ATHROW:
+                                    mv.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
+                                    mv.visitLdcInsn("exit " + name);
+                                    mv.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V", false);
+                                    break;
+                            }
+                            super.visitInsn(opcode);
+                        }
+                    };
+                }
+                return mv;
+            }
+        };
+        classReader.accept(classVisitor, ClassReader.SKIP_DEBUG);
+        write(BeforeAsmClass.class, classWriter.toByteArray());
+    }
+
+
     public static void addSetNameMethodByCoreApi() throws IOException {
         ClassReader classReader = new ClassReader(BeforeAsmClass.class.getName());
         ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
@@ -32,7 +79,7 @@ public class ChangeClassTest {
                 MethodVisitor setName = cv.visitMethod(ACC_PUBLIC, "setName", "(Ljava/lang/String;)V", null, null);
                 setName.visitCode();
                 setName.visitVarInsn(ALOAD, 0);
-                setName.visitVarInsn(Type.getType(BeforeAsmClass.class).getOpcode(ILOAD), 1);
+                setName.visitVarInsn(Type.getType(String.class).getOpcode(ILOAD), 1);
                 setName.visitFieldInsn(PUTFIELD, "com/bytecode/asm/BeforeAsmClass", "name", "Ljava/lang/String;");
                 setName.visitInsn(RETURN);
                 setName.visitMaxs(0, 0);
