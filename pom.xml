@@ -7,8 +7,9 @@
   <groupId>org.blog</groupId>
   <artifactId>blog</artifactId>
   <version>1.0.0</version>
+
   <modules>
-    <module>shardingsphere</module>
+    <module>spring-framework</module>
   </modules>
 
   <packaging>pom</packaging>
