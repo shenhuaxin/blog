@@ -5,4 +5,6 @@ import springboot.jpa.entity.User;
 
 
 public interface UserRepository extends JpaRepository<User, Long> {
+
+
 }

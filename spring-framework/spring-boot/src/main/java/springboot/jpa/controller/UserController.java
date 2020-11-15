@@ -20,7 +20,6 @@ public class UserController {
     @GetMapping("getAllUsers")
     public Page<User> getAllUsers(Pageable request) {
         Page<User> all = userRepository.findAll(request);
-
         System.out.println(all.getContent());
 
         return all;
