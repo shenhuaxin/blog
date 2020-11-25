@@ -8,7 +8,6 @@ import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.Iterator;
-import java.util.Set;
 
 /**
  * @author shenhuaxin
@@ -22,42 +21,10 @@ public class Server {
 
     public static void main(String[] args)
     {
-        selector1();
+        selector();
     }
 
 
-    public static void selector1() {
-        Selector selector = null;
-        ServerSocketChannel ssc = null;
-        try {
-            selector = Selector.open();
-            ssc = ServerSocketChannel.open();
-            ssc.socket().bind(new InetSocketAddress(PORT));
-            ssc.configureBlocking(false);
-            ssc.register(selector, SelectionKey.OP_ACCEPT);
-            while (true) {
-                if(selector.select(TIMEOUT) == 0){
-                    System.out.println("==");
-                    continue;
-                }
-                Set<SelectionKey> selectionKeys = selector.selectedKeys();
-                System.out.println(selectionKeys.size());
-                Iterator<SelectionKey> iter = selectionKeys.iterator();
-                while(iter.hasNext()) {
-                    SelectionKey key = iter.next();
-                    if (key.isAcceptable()) {
-                        handleAccept(key);
-                    }
-                    if (key.isReadable()) {
-
-                    }
-                    iter.remove();
-                }
-            }
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     public static void selector() {
         Selector selector = null;
