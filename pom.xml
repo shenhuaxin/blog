@@ -10,10 +10,20 @@
 
   <modules>
     <module>spring-framework</module>
+    <module>kafka</module>
   </modules>
 
   <packaging>pom</packaging>
 
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-webmvc</artifactId>
+        <version>5.2.9.RELEASE</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <build>
     <plugins>
