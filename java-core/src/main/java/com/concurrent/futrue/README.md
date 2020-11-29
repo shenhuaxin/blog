@@ -1,0 +1,4 @@
+说明了Future在并行调用时候的作用
+
+
+对比了原生多线程、CountDownLatch、CompletableFuture的作用。
