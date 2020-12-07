@@ -10,7 +10,6 @@
 
   <modules>
     <module>spring-framework</module>
-    <module>kafka</module>
   </modules>
 
   <packaging>pom</packaging>
