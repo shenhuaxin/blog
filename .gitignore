@@ -3,3 +3,7 @@
 gradlew
 gradlew.bat
 target
+.gradle
+.idea
+build
+gradle\wrapper
